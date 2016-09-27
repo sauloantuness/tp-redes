@@ -47,3 +47,15 @@ Ou compile e execute:
 go build hello.go
 ./hello
 ```
+
+### Executando
+
+Execute o cliente:
+```
+run client.go
+```
+
+Execute o servidor:
+```
+run server.go
+```
