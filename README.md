@@ -52,10 +52,10 @@ go build hello.go
 
 Execute o cliente:
 ```
-run client.go
+go run client.go
 ```
 
 Execute o servidor:
 ```
-run server.go
+go run server.go
 ```
