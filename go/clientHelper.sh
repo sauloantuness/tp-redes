@@ -1,0 +1,1 @@
+echo -n "01234" | nc localhost 3333

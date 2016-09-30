@@ -50,6 +50,9 @@ go build hello.go
 
 ### Executando
 
+https://systembash.com/a-simple-go-tcp-server-and-tcp-client/
+
+
 Execute o cliente:
 ```
 run client.go
