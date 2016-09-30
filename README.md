@@ -55,10 +55,10 @@ https://systembash.com/a-simple-go-tcp-server-and-tcp-client/
 
 Execute o cliente:
 ```
-run client.go
+go run client.go
 ```
 
 Execute o servidor:
 ```
-run server.go
+go run server.go
 ```
