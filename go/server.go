@@ -5,8 +5,8 @@ import "fmt"
 
 const (
     CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:3335"
-    CONN_PHYSICAL = "localhost:3334"
+    CONN_NETWORK = "localhost:9005"
+    CONN_PHYSICAL = "localhost:9004"
 )
 
 func printFrame(Frame []byte) {

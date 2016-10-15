@@ -5,8 +5,8 @@ import "fmt"
 
 const (
     CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:3333"
-    CONN_PHYSICAL = "localhost:3334"
+    CONN_NETWORK = "localhost:9003"
+    CONN_PHYSICAL = "localhost:9004"
 )
 
 func printFrame(Frame []byte) {
@@ -79,7 +79,7 @@ func main () {
       packet = removeFrame(frame)
 
       // Send Network PDU
-      fmt.Printf("> packet: % x\n", packet)
+      fmt.Printf("> packet: % s\n", packet)
       connNetwork.Write(packet)
       connNetwork.Close()
       fmt.Println()

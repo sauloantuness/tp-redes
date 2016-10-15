@@ -1,1 +1,1 @@
-echo -n "01234" | nc localhost 3333
+echo -n "GET /a.html HTTP/1.1\n\n" | nc localhost 9005
