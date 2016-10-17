@@ -1,10 +1,25 @@
+/*
+var http = require('http');
 var static = require('node-static');
+var file = new static.Server('./public');
 
-var file = new static.Server('./www');
+http.createServer(function (request, response) {
+    console.log(`${request.method} ${request.url}`);
+    file.serve(request, response);
+}).listen(9005);
+*/
 
-require('http').createServer(function (request, response) {
-    request.addListener('end', function () {
-        console.log(request.headers);
-        file.serve(request, response);
-    }).resume();
+var fs = require('fs'),
+    http = require('http');
+
+http.createServer(function (req, res) {
+  fs.readFile('./public/' + (req.url == '/' ? '/index.html' : req.url), function (err,data) {
+    if (err) {
+      res.writeHead(404);
+      res.end("Not Found");
+      return;
+    }
+    res.writeHead(200);
+    res.end(data);
+  });
 }).listen(9005);

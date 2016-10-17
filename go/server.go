@@ -63,22 +63,24 @@ func main () {
     for {
       connPhysical, _ := ln.Accept()
       frame := readPDU(connPhysical)
-      fmt.Printf("< frame: % x\n", frame)
+      //fmt.Printf("< frame: % x\n", frame)
+      fmt.Printf("< frame:\n")
       printFrame(frame)
       packet := removeFrame(frame)
       
       // Send Network PDU
       connNetwork, _ := net.Dial(CONN_TYPE, CONN_NETWORK)
-      fmt.Printf("> packet: % x\n", packet)
+      fmt.Printf("> packet: \n% s\n", packet)
       connNetwork.Write(packet)
 
       // Receive Network PDU
       packet = readPDU(connNetwork)
-      fmt.Printf("< packet: % x\n", packet)
+      fmt.Printf("< packet: \n% s\n", packet)
       frame = createFrame(packet)
 
       // Send Physical PDU
-      fmt.Printf("> frame: % x\n", frame)
+      //fmt.Printf("> frame: % x\n", frame)
+      fmt.Printf("> frame:\n")
       printFrame(frame)
       connPhysical.Write(frame)
       connPhysical.Close()
