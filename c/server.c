@@ -24,7 +24,7 @@ int main(){
   serverAddr.sin_family = AF_INET;
   /* Set port number, using htons function to use proper byte order */
   
-    
+  /*Adicionei esta linha para funcionar sem loop*/
   serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
   serverAddr.sin_port = htons(7891);
   /* Set IP address to localhost */
