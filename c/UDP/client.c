@@ -1,4 +1,6 @@
-/************* UDP CLIENT CODE *******************/
+/************* UDP CLIENT CODE *******************
+http://www.programminglogic.com/example-of-client-server-program-in-c-using-sockets-and-tcp/
+/
 
 #include <stdio.h>
 #include <sys/socket.h>
