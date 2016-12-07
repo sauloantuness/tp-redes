@@ -1,17 +1,24 @@
 /************* UDP CLIENT CODE *******************
 http://www.programminglogic.com/example-of-client-server-program-in-c-using-sockets-and-tcp/
-/
+*/
 
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
 
+int clientSocket, portNum, nBytes;
+char buffer[1024];
+struct sockaddr_in serverAddr;
+socklen_t addr_size;
+
+void PDU(){
+  printf("Port: %d\n",serverAddr.sin_port);
+  printf("Addr: %d\n",serverAddr.sin_addr.s_addr);
+}
+
 int main(){
-  int clientSocket, portNum, nBytes;
-  char buffer[1024];
-  struct sockaddr_in serverAddr;
-  socklen_t addr_size;
+
 
   /*Create UDP socket*/
   clientSocket = socket(PF_INET, SOCK_DGRAM, 0);
@@ -36,10 +43,10 @@ int main(){
     sendto(clientSocket,buffer,nBytes,0,(struct sockaddr *)&serverAddr,addr_size);
 
     /*Receive message from server*/
-                nBytes = recvfrom(clientSocket,buffer,1024,0,NULL, NULL);
+    nBytes = recvfrom(clientSocket,buffer,1024,0,NULL, NULL);
 
     printf("Received from server: %s\n",buffer);
-
+    PDU();
   }
 
   return 0;
