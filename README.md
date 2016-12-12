@@ -119,6 +119,12 @@ Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que f
 	 |								|
 	 |								|
 +-----------+				+-----------+
+|  Transp   |  				|  Transp   |
+|(client.c) |				|(server.c) |
++-----------+				+-----------+
+	 |								|
+	 |								|
++-----------+				+-----------+
 |  Física   |  -----------	|  Física   |
 |(client.go)|				|(server.go)|
 +-----------+				+-----------+
