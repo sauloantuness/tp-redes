@@ -67,7 +67,7 @@ go run server.go
 
 Levando em consideração que todo o processo de instalação da camada física foi realizado, podemos dar continuidade a camada de aplicação.
 
-A camada de aplicação do lado cliente será o browser e no lado do servidor foi implementado um simples servidor HTTP. 
+A camada de aplicação do lado cliente será o browser e no lado do servidor foi implementado um simples servidor HTTP.
 
 ### Instalação
 
@@ -85,23 +85,77 @@ Execute o servidor da camada de aplicação:
 nodejs server.js
 ```
 
+## Camada Transporte
+
+### Introdução
+
+Levando em consideração que todo o processo de instalação da camada física e aplicação foi realizado, podemos dar continuidade a camada de transporte.
+
+A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente.
+
+### Instalação
+
+Instalação do [gcc]
+
+```
+sudo apt-get install gcc
+```
+
+## Camada Rede
+
+### Introdução
+
+Levando em consideração que todo o processo de instalação da camada física, aplicação e transporte foi realizado, podemos dar continuidade a camada de rede.
+
+A camada de conectar irá conectar a camada de transporte e a camada fisica já implementadas anteriormente.
+
+### Instalação
+
+Instalação do [ruby](https://www.ruby-lang.org/pt/documentation/installation/)
+
+```
+sudo apt-get install ruby-full
+```
+
+### Execução
+
+Execute o servidor da camada de aplicação:
+```bash
+nodejs server.js
+```
+Execute o servidor da camada de transporte:
+```bash
+gcc server1.c -o server
+./server
+```
+Execute o servidor da camada de rede:
+```bash
+ruby server1.rb
+```
 Execute o servidor da camada física:
 ```bash
 go run server.go
 ```
-
 Execute o cliente da camada física:
 ```bash
 go run client.go
+```
+Execute o cliente da camada de rede:
+```bash
+ruby server1.rb
+```
+Execute o cliente da camada de transporte:
+```bash
+gcc client1.c -o cliente
+./server
 ```
 
 O lado cliente da camada física será executado através de um browser. Para isto basta acessar no browser o endereço:
 
 ```
-localhost:9005
+localhost:7894
 ```
-
-Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar que a requisição não acontece diretamente para o servidor nodejs sendo executado. Ao invés disso, a mensagem HTTP é enviada para a camada física do cliente, que encapsula a mensagem em um frame e então envia para a camada física do lado servidor. No lado servidor o frame é decodificado e a mensagem é enviada para a camada de aplicação. A requisição é então processada no servidor e uma mensagem HTTP é enviada ao cliente percorrendo todo o caminho de volta até ser exibida no browser.
+Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar que a requisição não acontece diretamente para o servidor nodejs sendo executado. Ao invés disso, a mensagem HTTP é enviada para a camada de transporte do cliente, que encapsula a mensagem em um frame e então envia para a camada de rede que encapsula e envia para a camada física do lado servidor. No lado servidor o frame é decodificado e a mensagem é enviada para a camada de aplicação. A requisição é então processada no servidor e uma mensagem HTTP é enviada ao cliente percorrendo todo o caminho de volta até ser exibida no browser.
 
 Durante a execução é possível ver todo o conteúdo das requisições e das respostas na saída do terminal onde estão sendo executados os programas da camada física.
 
@@ -116,16 +170,22 @@ Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que f
 | Aplicação |				| Aplicação |
 | (browser) |				|(server.js)|
 +-----------+				+-----------+
-	 |								|
-	 |								|
+	    |								|
+	    |								|
 +-----------+				+-----------+
-|  Transp   |  				|  Transp   |
-|(client.c) |				|(server.c) |
+|  Transp   |     	|  Transp   |
+|(client1.c)|				|(server1.c)|
 +-----------+				+-----------+
-	 |								|
-	 |								|
+      |								|
+      |								|
 +-----------+				+-----------+
-|  Física   |  -----------	|  Física   |
+|    Rede   |     	|    Rede   |
+|(client.rb)|				|(server.rb)|
++-----------+				+-----------+
+      |								|
+      |								|
++-----------+				+-----------+
+|  Física   |  ----	|  Física   |
 |(client.go)|				|(server.go)|
 +-----------+				+-----------+
 ```
