@@ -14,19 +14,25 @@
 #define CONN_NETWORK 7896
 #define HOST "127.0.0.1"
 
-int main(int argc , char *argv[])
-{
-  int sock_client, socket_desc , client_sock , c , read_size;
-  struct sockaddr_in server_client, server , client;
-  char message[1000] , server_reply[2000],client_message[2000];
+int sock_client, socket_desc , client_sock , c , read_size;
+struct sockaddr_in server_client, server , client;
+char message[1000] , server_reply[2000],client_message[2000];
 
-  //Create socket client
-  sock_client = socket(AF_INET , SOCK_STREAM , 0);
+int createSocket(){
+  //Create socket layer network
+  int sock_client = socket(AF_INET , SOCK_STREAM , 0);
   if (sock_client == -1)
   {
       printf("Could not create socket");
   }
   puts("Socket created");
+  return sock_client;
+}
+
+int main(int argc , char *argv[])
+{
+  //Create socket client
+  sock_client = createSocket();
 
   server_client.sin_addr.s_addr = inet_addr(HOST);
   server_client.sin_family = AF_INET;
@@ -41,15 +47,8 @@ int main(int argc , char *argv[])
 
   puts("Connected\n");
 
-
-/*----------------*/
     //Create socket
-    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-    if (socket_desc == -1)
-    {
-        printf("Could not create socket");
-    }
-    puts("Socket created");
+    socket_desc = createSocket();
 
     //Prepare the sockaddr_in structure
     server.sin_family = AF_INET;
