@@ -22,7 +22,7 @@ func printFrame(Frame []byte) {
   fmt.Printf("DestinationMAC: % x\n", DestinationMAC)
   fmt.Printf("     SourceMAC: % x\n", SourceMAC)
   fmt.Printf("     Ethertype: % x\n", Ethertype)
-  fmt.Printf("          Data: % x\n", Data)  
+  fmt.Printf("          Data: % x\n", Data)
   fmt.Printf("           CRC: % x\n", CRC)
   fmt.Println()
 }
