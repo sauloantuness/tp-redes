@@ -6,10 +6,14 @@
 #include<string.h>    //strlen
 #include<sys/socket.h>    //socket
 #include<arpa/inet.h> //inet_addr
+#include<unistd.h>    //write
+#include<bits/stdc++.h>
 
 #define CONN_APP 7894
 #define CONN_NETWORK 7893
 #define HOST "127.0.0.1"
+
+using namespace std;
 
 int sock_client, socket_desc , client_sock , c , read_size;
 struct sockaddr_in server_client, server , client;
@@ -26,7 +30,42 @@ int createSocket(){
   return sock_client;
 }
 
+void createSegmento(char *segmento){
+  char seg[1024];
+  strcat(seg,"xxxxxxxxxxxxxxxx");// port source - 8
+  strcat(seg,"yyyyyyyyyyyyyyyy");// port destination - 8
+  strcat(seg,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");// sequence number - 16
+  strcat(seg,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");// acknowlegement - 16
+  strcat(seg,"ssss");// tam - 4
+  strcat(seg,"wwww");// reserve - 4
+  strcat(seg,"rrrr");// flags - 4
+  strcat(seg,"dddddddddddddddddddd"); // window - 20
+  strcat(seg,"xxxxxxxxxxxxxxxx");// checksum - 16
+  strcat(seg,"yyyyyyyyyyyyyyyy");// urgent pointer - 16
+  strcat(seg,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");// options - 32
+}
 
+void removeSegmento(char *segment, char *data){
+  int length =( strlen(segment);
+  for(int i=144, j=0;i<length;i++,j++){
+      *data[j++] = *segment[i];
+  }
+}
+/*
+void printSegmento(char *segmento){
+
+}
+
+
+
+void removeSegmento(){
+
+}
+
+void readPDU(char *segmento){
+
+}
+*/
 int main(int argc , char *argv[])
 {
     //Create socket layer network
@@ -52,7 +91,7 @@ int main(int argc , char *argv[])
 
     //Prepare the sockaddr_in structure
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("0.0.0.0");
+    server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = htons( CONN_APP );
 
     //Bind

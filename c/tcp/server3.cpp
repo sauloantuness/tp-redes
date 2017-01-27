@@ -13,6 +13,9 @@
 
 using namespace std;
 
+struct sockaddr_in server , client;
+
+
 void createSegmento(char *segmento){
   char seg[1024];
   strcat(seg,"xxxxxxxxxxxxxxxx");// port source - 16
@@ -37,13 +40,24 @@ void removeSegmento(char *segment, char *data){
 }
 
 void printSegment(char *segment){
-
+  string s = segment;
+  cout << "Port Source: " << s.substr(0,16) << endl;
+  cout << "Port destination: " << s.substr(16,16) << endl;
+  cout << "Sequence number: " << s.substr(32,32) << endl;
+  cout << "Acknowlegement: " << s.substr(64,32) << endl;
+  cout << "Tam: " << s.substr(96,4) << endl;
+  cout << "Reserve: " << s.substr(100,4) << endl;
+  cout << "Flags: " << s.substr(104,4) << endl;
+  cout << "Window: " << s.substr(108,20) << endl;
+  cout << "Checksum: " << s.substr(128,16) << endl;
+  cout << "Urgent Pointer: " << s.substr(144,16) << endl;
+  cout << "Options: " << s.substr(160,32) << endl;
+  cout << "Data: " << s.substr(192,s.length()) << endl;
 }
 
 int main(int argc , char *argv[])
 {
     int socket_desc , client_sock , c , read_size;
-    struct sockaddr_in server , client;
     char client_message[2000], segment[3000], data[3000];
 
     //Create socket
@@ -87,6 +101,7 @@ int main(int argc , char *argv[])
     //Receive a message from client
     while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
     {
+        printSegment(client_message);
         removeSegmento(client_message, data);
         printf("%s\n", data);
         printf("Your message: %s\n", client_message );

@@ -6,6 +6,7 @@
 #include<string.h>    //strlen
 #include<sys/socket.h>    //socket
 #include<arpa/inet.h> //inet_addr
+#include<unistd.h>    //write
 #include<bits/stdc++.h>
 
 using namespace std;
