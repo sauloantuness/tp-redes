@@ -2,12 +2,20 @@ package main
 
 import "net"
 import "fmt"
+import "os"
 
 const (
     CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:7892"
-    CONN_PHYSICAL = "localhost:7891"
+    //CONN_NETWORK = "localhost:7892"
+    //CONN_PHYSICAL = "localhost:7891"
 )
+
+func checkError(err error) {
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+        os.Exit(1)
+    }
+}
 
 func printFrame(Frame []byte) {
   Preamble        := Frame[:8]
@@ -59,11 +67,18 @@ func readPDU(conn net.Conn) []byte {
 
 func main() {
 
+  conn_network := "127.0.0.1:7892"
+  conn_physical := "127.0.0.1:7891"
+  CONN_NETWORK, err := net.ResolveTCPAddr("tcp4", conn_network)
+  checkError(err)
   // connect layer in ruby
-  ln, _ := net.Listen(CONN_TYPE, CONN_NETWORK)
+  ln, _ := net.ListenTCP(CONN_TYPE, CONN_NETWORK)
 
-  for {  // connect to this socket in go
-    connPhysical, _ := net.Dial(CONN_TYPE, CONN_PHYSICAL)//port socket go
+  for {
+    CONN_PHYSICAL, err := net.ResolveTCPAddr("tcp4", conn_physical)
+    checkError(err)
+    // connect to this socket in go
+    connPhysical, _ := net.DialTCP(CONN_TYPE, nil,CONN_PHYSICAL)//port socket go
 
     // accept connection on port
     connNetwork, _ := ln.Accept()
@@ -97,6 +112,5 @@ func main() {
     fmt.Printf("> packet:\n % s\n", packet)
     connNetwork.Write([]byte(packet))
     fmt.Println()
-    connNetwork.Close()
   }
 }

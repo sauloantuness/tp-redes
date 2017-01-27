@@ -2,12 +2,21 @@ package main
 
 import "net"
 import "fmt"
+import "os"
+
 
 const (
     CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:7895"
-    CONN_PHYSICAL = "localhost:7891"
+  //  CONN_NETWORK = "localhost:7895"
+  //  CONN_PHYSICAL = "localhost:7891"
 )
+
+func checkError(err error) {
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+        os.Exit(1)
+    }
+}
 
 func printFrame(Frame []byte) {
   Preamble        := Frame[:8]
@@ -61,15 +70,22 @@ func readPDU(conn net.Conn) []byte {
 func main() {
 
   fmt.Println("Launching server...")
+  conn_network := "127.0.0.1:7895"
+  conn_physical := "127.0.0.1:7891"
+  CONN_PHYSICAL, err := net.ResolveTCPAddr("tcp4", conn_physical)
+  checkError(err)
   // listen on all interfaces in go
-  ln, _ := net.Listen(CONN_TYPE, CONN_PHYSICAL)
+  ln, _ := net.ListenTCP(CONN_TYPE, CONN_PHYSICAL)
 
   for {
     // accept connection on port
     connPhysical, _ := ln.Accept()
     // run loop forever (or until ctrl-c)
+
+    CONN_NETWORK, err := net.ResolveTCPAddr("tcp4", conn_network)
+    checkError(err)
     // connectede layer in ruby
-    connNetwork, _ := net.Dial(CONN_TYPE, CONN_NETWORK)
+    connNetwork, _ := net.DialTCP(CONN_TYPE, nil,CONN_NETWORK)
 
     // will listen for message to process ending in newline (\n) in go
     frame := readPDU(connPhysical)
