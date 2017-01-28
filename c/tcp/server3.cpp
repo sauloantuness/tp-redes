@@ -15,6 +15,22 @@ using namespace std;
 
 struct sockaddr_in server , client;
 
+string int_to_string(int number, int length){
+
+  char cs;
+  int n, i=0;
+  while(number > 0){
+    n = number%10;
+    number/=10;
+    cs= ('0' - n);
+
+    cout << cs << endl;
+  }
+  cs[i] = '\0';
+  string s = cs;
+  cout << s << endl;
+  return s;
+}
 
 void createSegmento(char *segmento){
   char seg[1024];
@@ -53,6 +69,11 @@ void printSegment(char *segment){
   cout << "Urgent Pointer: " << s.substr(144,16) << endl;
   cout << "Options: " << s.substr(160,32) << endl;
   cout << "Data: " << s.substr(192,s.length()) << endl;
+
+  cout << server.sin_family << endl;
+  cout << server.sin_addr.s_addr << endl;
+  cout << server.sin_port << endl;
+  int_to_string(server.sin_port,1);
 }
 
 int main(int argc , char *argv[])
