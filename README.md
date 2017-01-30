@@ -136,18 +136,19 @@ Execute o servidor da camada física:
 ```bash
 go run server.go
 ```
-Execute o cliente da camada física:
+Execute o cliente da camada de transporte:
 ```bash
-go run client.go
+gcc client1.c -o cliente
+./server
 ```
 Execute o cliente da camada de rede:
 ```bash
 ruby server1.rb
 ```
-Execute o cliente da camada de transporte:
+
+Execute o cliente da camada física:
 ```bash
-gcc client1.c -o cliente
-./server
+go run client.go
 ```
 
 O lado cliente da camada física será executado através de um browser. Para isto basta acessar no browser o endereço:

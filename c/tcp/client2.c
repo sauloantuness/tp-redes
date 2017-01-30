@@ -29,6 +29,39 @@ int createSocket(){
 
 int main(int argc , char *argv[])
 {
+      //Create socket to connect application layer
+      socket_desc = createSocket();
+
+      //Prepare the sockaddr_in structure
+      server.sin_family = AF_INET;
+      server.sin_addr.s_addr = inet_addr("0.0.0.0");
+      server.sin_port = htons( CONN_APP );
+
+      //Bind
+      if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+      {
+          //print the error message
+          perror("bind failed. Error");
+          return 1;
+      }
+      puts("bind done");
+
+      //Listen
+      listen(socket_desc , 3);
+
+      //Accept and incoming connection
+      puts("Waiting for incoming connections...");
+      c = sizeof(struct sockaddr_in);
+
+      //accept connection from an incoming client
+      client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+      if (client_sock < 0)
+      {
+          perror("accept failed");
+          return 1;
+      }
+      puts("Connection accepted");
+
     //Create socket layer network
     sock_client = createSocket();
 
@@ -44,42 +77,6 @@ int main(int argc , char *argv[])
     }
 
     puts("Connected\n");
-
-    /*-----*/
-
-    //Create socket to connect application layer
-    socket_desc = createSocket();
-
-    //Prepare the sockaddr_in structure
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("0.0.0.0");
-    server.sin_port = htons( CONN_APP );
-
-    //Bind
-    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        //print the error message
-        perror("bind failed. Error");
-        return 1;
-    }
-    puts("bind done");
-
-    //Listen
-    listen(socket_desc , 3);
-
-    //Accept and incoming connection
-    puts("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
-
-    //accept connection from an incoming client
-    client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
-    if (client_sock < 0)
-    {
-        perror("accept failed");
-        return 1;
-    }
-    puts("Connection accepted");
-
 
     //Receive a message layer application
     while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
