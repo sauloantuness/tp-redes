@@ -2,6 +2,7 @@
 
 ## Camada Física
 
+Por decisões de implementação é necessário colocar o ip do server manualmente.
 ### Instalação
 
 Baixar:
@@ -91,7 +92,7 @@ nodejs server.js
 
 Levando em consideração que todo o processo de instalação da camada física e aplicação foi realizado, podemos dar continuidade a camada de transporte.
 
-A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente. Ao ser executado no terminal é mostrada a pdu da camada de transporte. 
+A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente. Ao ser executado no terminal é mostrada a pdu da camada de transporte.
 
 ### Instalação
 
@@ -162,6 +163,8 @@ Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar 
 Durante a execução é possível ver todo o conteúdo das requisições e das respostas na saída do terminal onde estão sendo executados os programas da camada física.
 
 Todos os detalhes do protocolo HTTP são resolvidos pelo browser e pelo servidor HTTP.  Logo, o que coube a implementação, foi garantir o envio e recebimento das mensagens para as camadas corretas.
+
+Decidimos por rodar as camadas no localhost, como a camada de transporte é em c++, não conseguimos criar uma função para pegar a url, por isso, decimos em colocar o ip manualmente na camada física.
 
 Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que foram implementadas.
 
