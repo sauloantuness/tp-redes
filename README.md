@@ -91,14 +91,14 @@ nodejs server.js
 
 Levando em consideração que todo o processo de instalação da camada física e aplicação foi realizado, podemos dar continuidade a camada de transporte.
 
-A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente.
+A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente. Ao ser executado no terminal é mostrada a pdu da camada de transporte. 
 
 ### Instalação
 
-Instalação do [gcc]
+Instalação do [g++]
 
 ```
-sudo apt-get install gcc
+sudo apt-get install g++
 ```
 
 ## Camada Rede
@@ -123,9 +123,10 @@ Execute o servidor da camada de aplicação:
 ```bash
 nodejs server.js
 ```
-Execute o servidor da camada de transporte:
+
+Execute o servidor da camada de transporte na pasta tcp:
 ```bash
-gcc server1.c -o server
+g++ server2.c -o server
 ./server
 ```
 Execute o servidor da camada de rede:
@@ -136,9 +137,9 @@ Execute o servidor da camada física:
 ```bash
 go run server.go
 ```
-Execute o cliente da camada de transporte:
+Execute o cliente da camada de transporte na pasta tcp:
 ```bash
-gcc client1.c -o cliente
+g++ client2.cpp -o cliente
 ./server
 ```
 Execute o cliente da camada de rede:
