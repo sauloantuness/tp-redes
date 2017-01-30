@@ -16,7 +16,6 @@ struct sockaddr_in server_client, server , client;
 char message[3000] , server_reply[3000],client_message[3000];
 
 int createSocket(){
-  //Create socket layer network
   int sock_client = socket(AF_INET , SOCK_STREAM , 0);
   if (sock_client == -1)
   {
@@ -34,7 +33,7 @@ int main(int argc , char *argv[])
 
       //Prepare the sockaddr_in structure
       server.sin_family = AF_INET;
-      server.sin_addr.s_addr = inet_addr("0.0.0.0");
+      server.sin_addr.s_addr = INADDR_ANY;
       server.sin_port = htons( CONN_APP );
 
       //Bind
