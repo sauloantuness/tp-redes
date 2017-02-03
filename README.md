@@ -2,14 +2,11 @@
 
 [Introdução](#introducao)
 
-[Camada Física](#camada-fisica)
+[Funcionamento](#funcionamento)
 
-[Camada de Rede](#camada-de-rede)
+[Instalação](#instalação)
 
-[Camada de Transporte](#camada-de-transporte)
-
-[Camada de Aplicação](#camada-de-aplicacao)
-
+[Execução](#execução)
 
 # Introdução
 
