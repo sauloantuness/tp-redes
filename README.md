@@ -53,6 +53,10 @@ Por decisão de implementação, foi definido a comunicação entre cada camada 
 
 Em cada camada implementada, encontramos dois arquivos: um `client` e outro `server`. Os arquivos clientes, são executados na pilha do cliente e os arquivos `server` no servidor.
 
+Em todas as camadas definimos um fluxo de comunicação. Por exemplo, na pilha cliente, cada camada possui um socket aberto que escuta a camada superior. Quando uma mensagem é recebida no socket, esta mensagem é processada e então é estabelecida uma conexão com a camada inferior, que também possui um socket em estado de escuta. A mensagem é enviada e, é aguardada a resposta da camada inferior. Quando recebido a resposta, a resposta é processada e uma mensagem de resposta é enviada para a camada superior.
+
+Este fluxo procede para todas as camadas, com a única diferença que nas camadas do servidor, o fluxo acontece da camada inferior até a mais superior.
+
 ##Estrutura do projeto
 ```
 tp-redes/
@@ -68,11 +72,6 @@ tp-redes/
       client.go
       server.go
 ```
-
-Em todas as camadas definimos um fluxo de comunicação. Por exemplo, na pilha cliente, cada camada possui um socket aberto que escuta a camada superior. Quando uma mensagem é recebida no socket, esta mensagem é processada e então é estabelecida uma conexão com a camada inferior, que também possui um socket em estado de escuta. A mensagem é enviada e, é aguardada a resposta da camada inferior. Quando recebido a resposta, a resposta é processada e uma mensagem de resposta é enviada para a camada superior.
-
-Este fluxo procede para todas as camadas, com a única diferença que nas camadas do servidor, o fluxo acontece da camada inferior até a mais superior.
-
 
 # Instalação
 
