@@ -1,9 +1,0 @@
-			CLIENTE					SERVER
-			rcv  send	
-Aplicação 		 9001			9007 
-
-Transporte 	9001 9002			9006 9007
-
-Rede		9002 9003			9005 9006
-
-Física		9003 9004			9004 9005

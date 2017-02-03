@@ -3,10 +3,11 @@ package main
 import "net"
 import "fmt"
 
+
 const (
     CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:9005"
-    CONN_PHYSICAL = "localhost:9004"
+    CONN_NETWORK = "localhost:7895"
+    CONN_PHYSICAL = ":7891"
 )
 
 func printFrame(Frame []byte) {
@@ -22,7 +23,7 @@ func printFrame(Frame []byte) {
   fmt.Printf("DestinationMAC: % x\n", DestinationMAC)
   fmt.Printf("     SourceMAC: % x\n", SourceMAC)
   fmt.Printf("     Ethertype: % x\n", Ethertype)
-  fmt.Printf("          Data: % x\n", Data)  
+  fmt.Printf("          Data: % x\n", Data)
   fmt.Printf("           CRC: % x\n", CRC)
   fmt.Println()
 }
@@ -50,6 +51,7 @@ func removeFrame(Frame []byte) []byte {
   return Data
 }
 
+
 func readPDU(conn net.Conn) []byte {
   pdu := make([]byte, 1024)
   n, _ := conn.Read(pdu)
@@ -57,33 +59,45 @@ func readPDU(conn net.Conn) []byte {
   return pdu
 }
 
-func main () {
-  // Create a socket to listen the physical layer
+func main() {
+
+  fmt.Println("Launching server...")
+  // connectede layer in ruby
+  connNetwork, _ := net.Dial(CONN_TYPE, CONN_NETWORK)
+
+  // listen on all interfaces in go
   ln, _ := net.Listen(CONN_TYPE, CONN_PHYSICAL)
-    for {
-      connPhysical, _ := ln.Accept()
-      frame := readPDU(connPhysical)
-      //fmt.Printf("< frame: % x\n", frame)
-      fmt.Printf("< frame:\n")
-      printFrame(frame)
-      packet := removeFrame(frame)
-      
-      // Send Network PDU
-      connNetwork, _ := net.Dial(CONN_TYPE, CONN_NETWORK)
-      fmt.Printf("> packet: \n% s\n", packet)
-      connNetwork.Write(packet)
 
-      // Receive Network PDU
-      packet = readPDU(connNetwork)
-      fmt.Printf("< packet: \n% s\n", packet)
-      frame = createFrame(packet)
+  for {  // run loop forever (or until ctrl-c)
 
-      // Send Physical PDU
-      //fmt.Printf("> frame: % x\n", frame)
-      fmt.Printf("> frame:\n")
-      printFrame(frame)
-      connPhysical.Write(frame)
-      connPhysical.Close()
-      fmt.Println()
-    }
+    // accept connection on port
+    connPhysical, _ := ln.Accept()
+
+    // will listen for message to process ending in newline (\n) in go
+    frame := readPDU(connPhysical)
+    // output message received
+    //fmt.Print("Message Received:\n", string(message) + "\n")
+    fmt.Printf("Message Received:\n< frame:\n")
+    printFrame(frame)
+    packet := removeFrame(frame)
+
+    //print packet
+    fmt.Printf("> packet: \n% s\n", packet)
+    // send message received layer in go to layer in ruby
+    connNetwork.Write([]byte(packet))
+
+    //output message received to layer in ruby
+    //  message1, _ := bufio.NewReader(connNetwork).ReadString('\n')
+    packet = readPDU(connNetwork)
+    //fmt.Print("Message Received from server in RUBY:\n", string(message1))
+    fmt.Printf("< packet: \n% s\n", packet)
+    frame = createFrame(packet)
+
+    fmt.Printf("> frame:\n")
+    printFrame(frame)
+    fmt.Println()
+    //send message client go
+    connPhysical.Write([]byte(frame))
+    connPhysical.Close()
+  }
 }
