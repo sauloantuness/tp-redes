@@ -66,9 +66,9 @@ tp-redes/
       server.go
 ```
 
-Em todas as camadas definimos um fluxo de comunicação. Por exemplo, na pilha cliente, cada camada possui um socket aberto que escuta a camada superior. Quando uma mensagem é recebida no socket, esta mensagem é processada e então é estabelecida uma nova conexão com a camada inferior, que também possui um socket em estado de escuta. A mensagem é enviada e então é aguardada a resposta da camada inferior. Quando recebido a resposta, a resposta é processada e então uma nova mensagem é enviada para a camada superior.
+Em todas as camadas definimos um fluxo de comunicação. Por exemplo, na pilha cliente, cada camada possui um socket aberto que escuta a camada superior. Quando uma mensagem é recebida no socket, esta mensagem é processada e então é estabelecida uma conexão com a camada inferior, que também possui um socket em estado de escuta. A mensagem é enviada e então é aguardada a resposta da camada inferior. Quando recebido a resposta, a resposta é processada e então uma mensagem de resposta é enviada para a camada superior.
 
-Este fluxo procede para todas as camadas, com a única diferença que na camada do servidor, o fluxo acontece da camada inferior até a mais superior.
+Este fluxo procede para todas as camadas, com a única diferença que nas camadas do servidor, o fluxo acontece da camada inferior até a mais superior.
 
 
 # Instalação
@@ -140,10 +140,9 @@ sudo apt-get install -y nodejs
 ```
 
 
-
 # Execução
 
-Em dois computadores conectados a mesma rede, deve-se definir um computador para a execução da pilha cliente e outro para a execução da pilha servidor. Feito isso, no respectivo computador execute os seguintes comandos abaixo. Lembre de executar cada camada em um terminal.
+Em dois computadores conectados a mesma rede, deve-se definir um computador para a execução da pilha cliente e outro para a execução da pilha servidor. Feito isso, no respectivo computador execute os seguintes comandos abaixo. Lembre de executar cada camada em um terminal para que seja possível visualizar as mensagens trafegadas em cada camada.
 
 ## Servidor
 
@@ -167,8 +166,8 @@ go run server.go
 ```
 Nese momento, toda a pilha do servidor está pronta para receber uma mensagem da pilha cliente.
 
-## Cliente
 
+## Cliente
 
 Física
 ```bash
@@ -191,13 +190,8 @@ Aplicação (browser)
 localhost:7894
 ```
 
-
-Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar que a requisição não acontece diretamente para o servidor nodejs sendo executado. Ao invés disso, a mensagem HTTP é enviada para a camada de transporte do cliente, que encapsula a mensagem em um frame e então envia para a camada de rede que encapsula e envia para a camada física do lado servidor. No lado servidor o frame é decodificado e a mensagem é enviada para a camada de aplicação. A requisição é então processada no servidor e uma mensagem HTTP é enviada ao cliente percorrendo todo o caminho de volta até ser exibida no browser.
+Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar que a requisição não acontece diretamente para o servidor nodejs sendo executado. Ao invés disso, a mensagem HTTP é enviada para a camada de transporte do cliente, que encapsula a mensagem em um frame e então envia para a camada de rede que encapsula e envia para a camada física ainda na pilha do cliente. Então uma comunicação é estabelecida com o lado servidor. No lado servidor o frame é decodificado na camada física e então propagado para as camadas superiores até que a mensagem chegue na camada de aplicação. A requisição é então processada no servidor e uma mensagem HTTP é enviada ao cliente percorrendo todo o caminho de volta até ser exibida no browser.
 
 Durante a execução é possível ver todo o conteúdo das requisições e das respostas na saída do terminal onde estão sendo executados os programas da camada física.
 
 Todos os detalhes do protocolo HTTP são resolvidos pelo browser e pelo servidor HTTP.  Logo, o que coube a implementação, foi garantir o envio e recebimento das mensagens para as camadas corretas.
-
-Decidimos por rodar as camadas no localhost, como a camada de transporte é em c++, não conseguimos criar uma função para pegar a url, por isso, decimos em colocar o ip manualmente na camada física.
-
-Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que foram implementadas.
