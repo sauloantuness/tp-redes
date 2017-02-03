@@ -1,9 +1,82 @@
-# tp-redes
+# Trabalho de Implementação de Pilha de Protocolos
 
-## Camada Física
+[Introdução](#introducao)
 
-Por decisões de implementação é necessário colocar o ip do server manualmente.
-### Instalação
+[Camada Física](#camada-fisica)
+
+[Camada de Rede](#camada-de-rede)
+
+[Camada de Transporte](#camada-de-transporte)
+
+[Camada de Aplicação](#camada-de-aplicacao)
+
+
+# Introdução
+
+As camadas implementadas seguem as devidas [especificações](https://docs.google.com/document/preview?hgd=1&id=1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A).
+
+# Funcionamento
+
+Existem 2 pilhas de execução: uma para o cliente e outra para o servidor, como pode ser observado no diagrama abaixo:
+
+```
+   CLIENTE                     SERVIDOR
+
++-----------+               +-----------+
+| Aplicação |               | Aplicação |
+| (browser) |               |(server.js)|
+|           |               |   :7897   |
++-----------+               +-----------+
+      |                           |
+      |                           |
++------------+               +------------+
+|  Transp    |               |  Transp    |
+|(client.cpp)|               |(server.cpp)|
+|   :7894    |               |   :7896    |
++------------+               +------------+
+      |                           |
+      |                           |
++-----------+               +-----------+
+|    Rede   |               |    Rede   |
+|(client.rb)|               |(server.rb)|
+|   :7893   |               |   :7895   |
++-----------+               +-----------+
+      |                           |
+      |                           |
++-----------+               +-----------+
+|  Física   |     ----      |  Física   |
+|(client.go)|               |(server.go)|
+|   :7892   |               |   :7891   |
++-----------+               +-----------+
+```
+
+Por decisão de implementação, foi definido a comunicação entre cada camada através de sockets.
+
+Em cada camada implementada, encontramos dois arquivos: um `client` e outro `server`. Os arquivos clientes, são executados na pilha do cliente e os arquivos `server` no servidor.
+
+```
+tp-redes/
+   application/
+      server.js
+   transport/
+      client.cpp
+      server.cpp
+   network/
+      client.rb
+      server.rb
+   physical/
+      client.go
+      server.go
+```
+
+Em todas as camadas definimos um fluxo de comunicação. Por exemplo, na pilha cliente, cada camada possui um socket aberto que escuta a camada superior. Quando uma mensagem é recebida no socket, esta mensagem é processada e então é estabelecida uma nova conexão com a camada inferior, que também possui um socket em estado de escuta. A mensagem é enviada e então é aguardada a resposta da camada inferior. Quando recebido a resposta, a resposta é processada e então uma nova mensagem é enviada para a camada superior.
+
+Este fluxo procede para todas as camadas, com a única diferença que na camada do servidor, o fluxo acontece da camada inferior até a mais superior.
+
+
+# Instalação
+
+## Camada Física - [Go](https://golang.org/)
 
 Baixar:
 
@@ -49,115 +122,79 @@ go build hello.go
 ./hello
 ```
 
-### Executando
+## Camada Rede - [Ruby](https://www.ruby-lang.org/pt/documentation/installation/)
 
-Execute o cliente:
 ```
-go run client.go
-```
-
-Execute o servidor:
-```
-go run server.go
+sudo apt-get install ruby-full
 ```
 
 
-## Camada Aplicação
+## Camada Transporte - [G++](https://gcc.gnu.org/)
 
-### Introdução
+```
+sudo apt-get install g++
+```
 
-Levando em consideração que todo o processo de instalação da camada física foi realizado, podemos dar continuidade a camada de aplicação.
-
-A camada de aplicação do lado cliente será o browser e no lado do servidor foi implementado um simples servidor HTTP.
-
-### Instalação
-
-Instalação do [nodejs](nodejs.org)
+## Camada Aplicação - [Node.js](nodejs.org)
 
 ```
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
-### Execução
 
-Execute o servidor da camada de aplicação:
+
+# Execução
+
+Em dois computadores conectados a mesma rede, deve-se definir um computador para a execução da pilha cliente e outro para a execução da pilha servidor. Feito isso, no respectivo computador execute os seguintes comandos abaixo. Lembre de executar cada camada em um terminal.
+
+## Servidor
+
+Aplicação
 ```bash
 nodejs server.js
 ```
 
-## Camada Transporte
-
-### Introdução
-
-Levando em consideração que todo o processo de instalação da camada física e aplicação foi realizado, podemos dar continuidade a camada de transporte.
-
-A camada de transporte irá conectar a camada de aplicação e a camada fisica já implementadas anteriormente. Ao ser executado no terminal é mostrada a pdu da camada de transporte.
-
-### Instalação
-
-Instalação do [g++]
-
-```
-sudo apt-get install g++
-```
-
-## Camada Rede
-
-### Introdução
-
-Levando em consideração que todo o processo de instalação da camada física, aplicação e transporte foi realizado, podemos dar continuidade a camada de rede.
-
-A camada de conectar irá conectar a camada de transporte e a camada fisica já implementadas anteriormente.
-
-### Instalação
-
-Instalação do [ruby](https://www.ruby-lang.org/pt/documentation/installation/)
-
-```
-sudo apt-get install ruby-full
-```
-
-### Execução
-
-Execute o servidor da camada de aplicação:
+Transporte
 ```bash
-nodejs server.js
-```
-
-Execute o servidor da camada de transporte na pasta tcp:
-```bash
-g++ server2.c -o server
+g++ server.cpp -o server
 ./server
 ```
-Execute o servidor da camada de rede:
+Rede
 ```bash
-ruby server1.rb
+ruby server.rb
 ```
-Execute o servidor da camada física:
+Física
 ```bash
 go run server.go
 ```
-Execute o cliente da camada de transporte na pasta tcp:
-```bash
-g++ client2.cpp -o cliente
-./server
-```
-Execute o cliente da camada de rede:
-```bash
-ruby server1.rb
-```
+Nese momento, toda a pilha do servidor está pronta para receber uma mensagem da pilha cliente.
 
-Execute o cliente da camada física:
+## Cliente
+
+
+Física
 ```bash
 go run client.go
 ```
 
-O lado cliente da camada física será executado através de um browser. Para isto basta acessar no browser o endereço:
+Rede
+```bash
+ruby client.rb
+```
 
+Transporte
+```bash
+g++ client.cpp -o client
+./client
+```
+
+Aplicação (browser)
 ```
 localhost:7894
 ```
+
+
 Ao fazer isto, uma mensagem HTTP será enviada ao servidor. É importante notar que a requisição não acontece diretamente para o servidor nodejs sendo executado. Ao invés disso, a mensagem HTTP é enviada para a camada de transporte do cliente, que encapsula a mensagem em um frame e então envia para a camada de rede que encapsula e envia para a camada física do lado servidor. No lado servidor o frame é decodificado e a mensagem é enviada para a camada de aplicação. A requisição é então processada no servidor e uma mensagem HTTP é enviada ao cliente percorrendo todo o caminho de volta até ser exibida no browser.
 
 Durante a execução é possível ver todo o conteúdo das requisições e das respostas na saída do terminal onde estão sendo executados os programas da camada física.
@@ -167,34 +204,3 @@ Todos os detalhes do protocolo HTTP são resolvidos pelo browser e pelo servidor
 Decidimos por rodar as camadas no localhost, como a camada de transporte é em c++, não conseguimos criar uma função para pegar a url, por isso, decimos em colocar o ip manualmente na camada física.
 
 Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que foram implementadas.
-
-```
-   CLIENTE                     SERVIDOR
-
-+-----------+               +-----------+
-| Aplicação |               | Aplicação |
-| (browser) |               |(server.js)|
-|           |               |   :7897   |
-+-----------+               +-----------+
-      |                           |
-      |                           |
-+-----------+               +-----------+
-|  Transp   |               |  Transp   |
-|(client2.c)|               |(server2.c)|
-|   :7894   |               |   :7896   |
-+-----------+               +-----------+
-      |                           |
-      |                           |
-+-----------+               +-----------+
-|    Rede   |               |    Rede   |
-|(client.rb)|               |(server.rb)|
-|   :7893   |               |   :7895   |
-+-----------+               +-----------+
-      |                           |
-      |                           |
-+-----------+               +-----------+
-|  Física   |     ----      |  Física   |
-|(client.go)|               |(server.go)|
-|   :7892   |               |   :7891   |
-+-----------+               +-----------+
-```
