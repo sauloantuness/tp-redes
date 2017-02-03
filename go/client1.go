@@ -6,7 +6,7 @@ import "fmt"
 const (
     CONN_TYPE = "tcp"
     CONN_NETWORK = "localhost:7892"
-    CONN_PHYSICAL = "192.168.1.100:7891"
+    CONN_PHYSICAL = "172.16.17.148:7891"
 )
 
 func printFrame(Frame []byte) {
@@ -70,7 +70,7 @@ func main() {
     packet := readPDU(connNetwork)
 
     // output message received
-    fmt.Print("Message Received layer in rubby:\n", string(packet) + "\n")
+    fmt.Print("Message Received layer in ruby:\n", string(packet) + "\n")
 
     //create frame
     frame := createFrame(packet)

@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int sock_client, socket_desc , client_sock , c , read_size;
+int sock_client, socket_server , client_sock , c , read_size;
 struct sockaddr_in server_client, server , client;
 char message[3000] , server_reply[3000], client_message[3000], data[3000], segment[3000];
 
@@ -29,7 +29,7 @@ string full_binary(string bin, int n);
 int main(int argc , char *argv[])
 {
       //Create socket to connect application layer
-      socket_desc = createSocket();
+      socket_server = createSocket();
 
       //Prepare the sockaddr_in structure
       server.sin_family = AF_INET;
@@ -37,23 +37,22 @@ int main(int argc , char *argv[])
       server.sin_port = htons( CONN_APP );
 
       //Bind
-      if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+      if( bind(socket_server,(struct sockaddr *)&server , sizeof(server)) < 0)
       {
-          //print the error message
           perror("bind failed. Error");
           return 1;
       }
       puts("bind done");
 
       //Listen
-      listen(socket_desc , 3);
+      listen(socket_server , 3);
 
       //Accept and incoming connection
       puts("Waiting for incoming connections...");
       c = sizeof(struct sockaddr_in);
 
       //accept connection from an incoming client
-      client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+      client_sock = accept(socket_server, (struct sockaddr *)&client, (socklen_t*)&c);
       if (client_sock < 0)
       {
           perror("accept failed");
@@ -76,6 +75,7 @@ int main(int argc , char *argv[])
     }
 
     puts("Connected\n");
+
 
     //Receive a message layer application
     while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
@@ -115,7 +115,6 @@ int main(int argc , char *argv[])
           memset(data,0,3000);
           memset(client_message,0,2000);
           memset(server_reply,0,2000);
-
     }
     close(sock_client);
     return 0;

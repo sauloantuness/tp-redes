@@ -169,28 +169,32 @@ Decidimos por rodar as camadas no localhost, como a camada de transporte é em c
 Abaixo podemos conferir o atual esquema de relacionamento entre as camadas que foram implementadas.
 
 ```
-   CLIENTE					   SERVIDOR
+   CLIENTE                     SERVIDOR
 
-+-----------+				+-----------+
-| Aplicação |				| Aplicação |
-| (browser) |				|(server.js)|
-+-----------+				+-----------+
-	    |								|
-	    |								|
-+-----------+				+-----------+
-|  Transp   |     	|  Transp   |
-|(client1.c)|				|(server1.c)|
-+-----------+				+-----------+
-      |								|
-      |								|
-+-----------+				+-----------+
-|    Rede   |     	|    Rede   |
-|(client.rb)|				|(server.rb)|
-+-----------+				+-----------+
-      |								|
-      |								|
-+-----------+				+-----------+
-|  Física   |  ----	|  Física   |
-|(client.go)|				|(server.go)|
-+-----------+				+-----------+
++-----------+               +-----------+
+| Aplicação |               | Aplicação |
+| (browser) |               |(server.js)|
+|           |               |   :7897   |
++-----------+               +-----------+
+      |                           |
+      |                           |
++-----------+               +-----------+
+|  Transp   |               |  Transp   |
+|(client2.c)|               |(server2.c)|
+|   :7894   |               |   :7896   |
++-----------+               +-----------+
+      |                           |
+      |                           |
++-----------+               +-----------+
+|    Rede   |               |    Rede   |
+|(client.rb)|               |(server.rb)|
+|   :7893   |               |   :7895   |
++-----------+               +-----------+
+      |                           |
+      |                           |
++-----------+               +-----------+
+|  Física   |     ----      |  Física   |
+|(client.go)|               |(server.go)|
+|   :7892   |               |   :7891   |
++-----------+               +-----------+
 ```
