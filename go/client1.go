@@ -2,12 +2,8 @@ package main
 
 import "net"
 import "fmt"
+import "os"
 
-const (
-    CONN_TYPE = "tcp"
-    CONN_NETWORK = "localhost:7892"
-    CONN_PHYSICAL = "172.16.17.148:7891"
-)
 
 func printFrame(Frame []byte) {
   Preamble        := Frame[:8]
@@ -58,6 +54,10 @@ func readPDU(conn net.Conn) []byte {
 }
 
 func main() {
+  CONN_TYPE := "tcp"
+  CONN_NETWORK := "localhost:7892"
+  CONN_PHYSICAL := os.Args[1] + ":7891"
+
   // connect layer in ruby
   ln, _ := net.Listen(CONN_TYPE, CONN_NETWORK)
 
