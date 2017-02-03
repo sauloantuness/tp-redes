@@ -10,7 +10,9 @@
 
 # Introdução
 
-As camadas implementadas seguem as devidas [especificações](https://docs.google.com/document/preview?hgd=1&id=1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A).
+Este trabalho tem como objetivo implementar uma pilha de protocolos - V 3.1, as camadas seguem as devidas [especificações](https://docs.google.com/document/preview?hgd=1&id=1O3cNM0T6gFNz9PeMYcnzbmBzEe8J7k34DaefJDSsv4A).
+
+De acordo com Kurose, "a internet é um sistema extremamente complicado e que possui muitos componentes.". Com isso, para que um sistema complexo funcione perfeitamente e permita a comunicação, este deve comunicar sem depender de plataforma ou sistema específico. Portanto, foram criados os protocolos de rede, segundo a definição da [CISCO](http://www.cisco.com/c/en/us/index.html), "um protocolo é uma descrição formal de um conjunto de regras e convenções que governam a maneira de comunicação entre os dispositivos em uma rede."
 
 # Funcionamento
 
